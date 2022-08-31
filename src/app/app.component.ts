@@ -22,7 +22,7 @@ import { Component } from '@angular/core';
       }
 
       main {
-        flex-basis: 75%;
+        flex-basis: 100%;
       }
     }
   `]
