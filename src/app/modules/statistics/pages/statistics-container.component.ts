@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { combineLatest } from 'rxjs';
-import { IUser } from '../models/user.model';
-import { ITodo } from '../models/todo.model';
-import { IPost } from '../models/post.model';
-import { createRandomHex } from '../utilities/create-random-hex';
 import { JsonPlaceholderService } from '../services/json-placeholder.service';
-import { IChartData } from '../models/chart-data.model';
-
+import { StatisticsContainerService } from './statistics-container.service';
 
 @Component({
   selector: 'kpi-statistics-container', template: `
@@ -16,22 +11,35 @@ import { IChartData } from '../models/chart-data.model';
 
       <div class="row align-items-center m-0">
         <div class="col-12 col-md-6">
-          <kpi-chart [config]="todosChartConfig" [id]="'id1'"></kpi-chart>
+          <kpi-chart [config]="todosChartConfigLine" [id]="'id1'"></kpi-chart>
         </div>
 
         <div class="col-12 col-md-6">
-          <kpi-chart [config]="postsChartConfig" [id]="'id2'"></kpi-chart>
+          <kpi-chart [config]="postsChartConfigPie" [id]="'id2'"></kpi-chart>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <kpi-chart [config]="todosChartConfigDoughnut" [id]="'id3'"></kpi-chart>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <kpi-chart [config]="postsChartConfigRadar" [id]="'id4'"></kpi-chart>
         </div>
       </div>
     </div>
   `,
+  providers: [StatisticsContainerService]
 })
 export class StatisticsContainerComponent implements OnInit {
-  public todosChartConfig: ChartConfiguration | null = null;
-  public postsChartConfig: ChartConfiguration | null = null;
+  public todosChartConfigLine: ChartConfiguration | null = null;
+  public todosChartConfigDoughnut: ChartConfiguration | null = null;
+  public postsChartConfigPie: ChartConfiguration | null = null;
+  public postsChartConfigRadar: ChartConfiguration | null = null;
 
-  constructor(private jsonPlaceholderService: JsonPlaceholderService) {
-  }
+  constructor(
+    private jsonPlaceholderService: JsonPlaceholderService,
+    private statisticsContainerService: StatisticsContainerService
+  ) {}
 
   public ngOnInit(): void {
     combineLatest([
@@ -39,46 +47,10 @@ export class StatisticsContainerComponent implements OnInit {
       this.jsonPlaceholderService.getPosts(),
       this.jsonPlaceholderService.getTodos()
     ]).subscribe(([users, posts, todos]) => {
-      this.todosChartConfig  = this.createConfigTodos(users, todos);
-      this.postsChartConfig = this.createConfigPosts(users, posts);
+      this.todosChartConfigLine = this.statisticsContainerService.createConfigTodos('line', users, todos);
+      this.postsChartConfigPie = this.statisticsContainerService.createConfigPosts('pie', users, posts);
+      this.todosChartConfigDoughnut = this.statisticsContainerService.createConfigTodos('doughnut', users, todos);
+      this.postsChartConfigRadar = this.statisticsContainerService.createConfigPosts('radar', users, posts);
     })
-  }
-
-  private calculateCompletedTodos(users: IUser[], todos: ITodo[]): IChartData[] {
-    return users.map(user => ({
-      name: `${ user.username } - ${ user.name }`,
-      value: todos.filter(todo => todo.userId === user.id && todo.completed).length,
-      color: createRandomHex()
-    }));
-  }
-
-  private calculateNumberOfPosts(users: IUser[], posts: IPost[]): IChartData[] {
-    return users.map(user => ({
-      name: `${ user.username } - ${ user.name }`,
-      value: posts.filter(post => post.userId === user.id).length,
-      color: createRandomHex()
-    }));
-  }
-
-  private createConfigTodos(users: IUser[], todos: ITodo[]): ChartConfiguration {
-    const data = this.calculateCompletedTodos(users, todos);
-    return {
-      type: 'line', data: {
-        labels: data.map(d => d.name), datasets: [{
-          label: 'Numero Todo completati', data: data.map(d => d.value), backgroundColor: data.map(d => d.color)
-        }]
-      }
-    }
-  }
-
-  private createConfigPosts(users: IUser[], posts: IPost[]): ChartConfiguration {
-    const data = this.calculateNumberOfPosts(users, posts);
-    return {
-      type: 'pie', data: {
-        labels: data.map(d => d.name), datasets: [{
-          label: 'Numero Post', data: data.map(d => d.value), backgroundColor: data.map(d => d.color)
-        }]
-      }
-    }
   }
 }
