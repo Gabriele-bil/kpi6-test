@@ -5,7 +5,7 @@ import { JsonPlaceholderService } from '../services/json-placeholder.service';
 import { StatisticsContainerService } from './statistics-container.service';
 
 @Component({
-  selector: 'kpi-statistics-container', template: `
+  template: `
     <div>
       <h1 class="p-5">Statistics</h1>
 

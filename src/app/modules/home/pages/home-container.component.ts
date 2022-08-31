@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'kpi-home-container', template: `
+  template: `
     <div class="w-100">
       <h1 class="p-5">Lorem Ipsum</h1>
 
@@ -45,12 +45,4 @@ import { Component, OnInit } from '@angular/core';
     }
   `]
 })
-export class HomeContainerComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
-}
+export class HomeContainerComponent {}

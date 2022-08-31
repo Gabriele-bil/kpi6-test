@@ -7,8 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UserIpService {
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   public getIp(): Observable<string> {
     return this.http.get<{ ip: string }>('https://api.ipify.org?format=json').pipe(map(({ ip }) => ip));

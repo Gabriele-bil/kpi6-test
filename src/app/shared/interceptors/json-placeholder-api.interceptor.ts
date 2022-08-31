@@ -15,9 +15,7 @@ export class JsonPlaceholderApiInterceptor implements HttpInterceptor {
     const options = {
       url: `${environment.baseUrl}${request.url}`,
     };
-
     request = request.clone(options);
-
 
     return next.handle(request);
   }
