@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { UserIpService } from './shared/services/user-ip.service';
 
 @Component({
   selector: 'kpi-root',
   template: `
     <div id="container" class="d-flex">
       <aside>
-        <kpi-sidebar></kpi-sidebar>
+        <kpi-sidebar [ip]="ip$ | async"></kpi-sidebar>
       </aside>
       <main>
         <router-outlet></router-outlet>
@@ -27,4 +28,8 @@ import { Component } from '@angular/core';
     }
   `]
 })
-export class AppComponent {}
+export class AppComponent {
+  public ip$ = this.userIpService.getIp();
+
+  constructor(private userIpService: UserIpService) {}
+}

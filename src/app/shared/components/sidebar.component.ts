@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'kpi-sidebar',
@@ -19,11 +19,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
       </div>
 
-      <div class="position-relative">
-        <button class="btn text-white">
+      <div class="ip-container position-relative">
+        <button class="btn text-white" (click)="showIp = !showIp">
           <i class="bi bi-person"></i>
           Super Admin
         </button>
+
+        <select class="form-select position-absolute" disabled *ngIf="showIp">
+          <option selected [value]="ip">{{ ip }}</option>
+        </select>
       </div>
     </div>
   `,
@@ -40,8 +44,22 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           color: #000;
         }
       }
+
+      .ip-container {
+        button {
+          width: 10rem;
+        }
+
+        select {
+          top: 0;
+          right: -11rem;
+        }
+      }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  @Input() ip: string | null = null;
+  public showIp = false;
+}

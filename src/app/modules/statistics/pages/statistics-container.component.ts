@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
-import { JsonPlaceholderService } from '../services/json-placeholder.service';
 import { combineLatest } from 'rxjs';
 import { IUser } from '../models/user.model';
 import { ITodo } from '../models/todo.model';
-import { IChartData } from '../models/chart-data.model';
 import { IPost } from '../models/post.model';
 import { createRandomHex } from '../utilities/create-random-hex';
+import { JsonPlaceholderService } from '../services/json-placeholder.service';
+import { IChartData } from '../models/chart-data.model';
+
 
 @Component({
   selector: 'kpi-statistics-container', template: `
