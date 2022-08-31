@@ -16,7 +16,6 @@ import { UiModule } from './shared/ui.module';
     NgbModule,
     UiModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
